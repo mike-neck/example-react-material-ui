@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import {AppBar, Button, createStyles, IconButton, Theme, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Button, createStyles, IconButton, Menu, MenuItem, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 
@@ -20,13 +20,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 function App() {
   const classes = useStyles();
 
+  const [mainMenuAnchor, setMainMenuAnchor] = useState<HTMLElement | null>(null);
+  const clickMainMenu: (event: React.MouseEvent<HTMLButtonElement>) => void = event => setMainMenuAnchor(event.currentTarget);
+  const closeMainMenu = () => setMainMenuAnchor(null);
+
   return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <IconButton aria-controls="main-menu" aria-haspopup="true" edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={clickMainMenu}>
               <MenuIcon/>
             </IconButton>
+            <Menu id="main-menu" open={Boolean(mainMenuAnchor)} keepMounted anchorEl={mainMenuAnchor} onClose={closeMainMenu}>
+              <MenuItem onClick={closeMainMenu}>Foo</MenuItem>
+              <MenuItem onClick={closeMainMenu}>Bar</MenuItem>
+            </Menu>
             <Typography variant="h6" className={classes.title}>
               News
             </Typography>
